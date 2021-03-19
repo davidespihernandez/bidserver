@@ -1,0 +1,24 @@
+version: "3.8"
+services:
+  db:
+    container_name: biddb
+    image: postgres
+    environment:
+      - POSTGRES_DB=bidserver
+      - POSTGRES_USER=bidserver
+      - POSTGRES_PASSWORD=bidserver
+    restart: always
+    ports:
+      - 5432:5432
+
+  api:
+    build: .
+    container_name: bidapi
+    command: >
+      bash -c "while !</dev/tcp/db/5432; do sleep 1; done; python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
