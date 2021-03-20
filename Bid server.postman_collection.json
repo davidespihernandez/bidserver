@@ -34,6 +34,84 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Items list",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjE3NTY4NjUyLCJqdGkiOiI3OTdiNTE0ODljZjE0NDdmYTA0YzhhYzc4NWQ0ODk5MyIsInVzZXJfaWQiOjN9.cEN3L2iUMt6NBebVEUSHFPPQRT_5scVWLXhnXqu8-7M",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/items/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"items",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Bid list",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjE3NTY4NjUyLCJqdGkiOiI3OTdiNTE0ODljZjE0NDdmYTA0YzhhYzc4NWQ0ODk5MyIsInVzZXJfaWQiOjN9.cEN3L2iUMt6NBebVEUSHFPPQRT_5scVWLXhnXqu8-7M",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/bids/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"bids",
+						""
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

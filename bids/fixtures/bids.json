@@ -1,0 +1,64 @@
+[
+  {
+    "model": "bids.item",
+    "pk": 1,
+    "fields": {
+      "name": "First",
+      "description": "First item",
+      "best_bid": null
+    }
+  },
+  {
+    "model": "bids.item",
+    "pk": 2,
+    "fields": {
+      "name": "Second",
+      "description": "Second item",
+      "best_bid": null
+    }
+  },
+  {
+    "model": "bids.bid",
+    "pk": 1,
+    "fields": {
+      "user": 2,
+      "item": 1,
+      "amount": "1.00",
+      "date_created": "2021-03-20T21:20:16.632Z",
+      "last_updated": "2021-03-20T21:20:21.645Z"
+    }
+  },
+  {
+    "model": "bids.bid",
+    "pk": 2,
+    "fields": {
+      "user": 3,
+      "item": 1,
+      "amount": "2.00",
+      "date_created": "2021-03-20T21:20:55.838Z",
+      "last_updated": "2021-03-20T21:20:59.956Z"
+    }
+  },
+  {
+    "model": "bids.bid",
+    "pk": 3,
+    "fields": {
+      "user": 3,
+      "item": 2,
+      "amount": "1.00",
+      "date_created": "2021-03-20T21:21:24.171Z",
+      "last_updated": "2021-03-20T21:21:32.035Z"
+    }
+  },
+  {
+    "model": "bids.bid",
+    "pk": 4,
+    "fields": {
+      "user": 2,
+      "item": 2,
+      "amount": "2.00",
+      "date_created": "2021-03-20T21:21:48.161Z",
+      "last_updated": "2021-03-20T21:21:51.884Z"
+    }
+  }
+]
