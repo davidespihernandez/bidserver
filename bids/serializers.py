@@ -5,12 +5,6 @@ from rest_framework import serializers
 from bids.models import Item, Bid
 
 
-class ItemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Item
-        fields = "__all__"
-
-
 class BidSerializer(serializers.ModelSerializer):
     user = serializers.CharField(source="user.username")
 
@@ -20,3 +14,11 @@ class BidSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bid
         fields = "__all__"
+
+
+class ItemSerializer(serializers.ModelSerializer):
+    best_bid = BidSerializer(read_only=True)
+
+    class Meta:
+        model = Item
+        fields = ["id", "name", "description", "best_bid"]
