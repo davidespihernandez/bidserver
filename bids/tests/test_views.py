@@ -1,3 +1,4 @@
+from decimal import Decimal
 from unittest import mock
 
 from django.urls import reverse
@@ -5,6 +6,7 @@ from freezegun import freeze_time
 from rest_framework import status
 from rest_framework.test import APITestCase
 
+from bids.models import Bid
 from bids.tests.builder import Builder
 
 
@@ -124,3 +126,32 @@ class BidViewSetListTestCase(APITestCase):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 2)
+
+
+@freeze_time("1975-01-02T00:00:00Z")
+class BidViewSetCreateTestCase(APITestCase):
+    builder = Builder()
+    url = reverse("bid-list")
+
+    def setUp(self):
+        self.user = self.builder.user()
+        self.item = self.builder.item()
+        self.client.force_authenticate(self.user)
+        self.request_data = {
+            "item": self.item.pk,
+            "amount": Decimal(1),
+        }
+
+    def test_create_bid(self):
+        response = self.client.post(self.url, self.request_data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        bid = Bid.objects.filter(item=self.item, user=self.user).first()
+        self.assertEqual(bid.amount, Decimal(1))
+
+    def test_user_cant_create_2_bids(self):
+        self.client.post(self.url, self.request_data)
+        self.request_data["amount"] = Decimal(2)
+        response = self.client.post(self.url, self.request_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        bid = Bid.objects.filter(item=self.item, user=self.user).first()
+        self.assertEqual(bid.amount, Decimal(1))

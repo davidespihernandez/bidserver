@@ -39,9 +39,9 @@ class BidViewSet(ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        item_id = serializer.validated_data["item"]
+        item = serializer.validated_data["item"]
         # lock item so other concurrent transactions have to wait
-        Item.objects.filter(id=item_id).select_for_update().first()
+        Item.objects.filter(id=item.id).select_for_update().first()
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(

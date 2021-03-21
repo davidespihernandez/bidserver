@@ -174,7 +174,7 @@
 			"name": "Bids",
 			"item": [
 				{
-					"name": "Record a user's bid on an item (create) Copy",
+					"name": "Record a user's bid on an item (create)",
 					"request": {
 						"method": "POST",
 						"header": [
