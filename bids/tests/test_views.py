@@ -161,6 +161,18 @@ class BidViewSetCreateTestCase(APITestCase):
         response = self.client.post(self.url, self.request_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_another_user_can_create_bid(self):
+        self.builder.bid(item=self.item, user=self.user, amount=Decimal(1))
+        new_user = self.builder.user("new_user")
+        self.client.force_authenticate(new_user)
+        self.request_data["amount"] = Decimal(2)
+        response = self.client.post(self.url, self.request_data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        bid = Bid.objects.filter(item=self.item, user=new_user).first()
+        self.assertEqual(bid.amount, Decimal(2))
+        self.item.refresh_from_db()
+        self.assertEqual(bid.pk, self.item.best_bid.pk)
+
 
 @freeze_time("1975-01-02T00:00:00Z")
 class BidViewSetDetailTestCase(APITransactionTestCase):
