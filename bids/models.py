@@ -15,6 +15,9 @@ class Item(models.Model):
         "Bid", on_delete=models.SET_NULL, null=True, related_name="best_item"
     )
 
+    class Meta:
+        ordering = ["name"]
+
 
 class Bid(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
