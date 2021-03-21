@@ -12,9 +12,9 @@ class Builder:
         )
         return item
 
-    def user(self, username=None, password=None):
+    def user(self, username=None, password=None, **kwargs):
         user_model = get_user_model()
-        user = user_model(username=username or "user")
+        user = user_model(username=username or "user", **kwargs)
         user.set_password(password or "password")
         user.save()
         return user

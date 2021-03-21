@@ -1,4 +1,5 @@
 from django.db import transaction
+from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.response import Response
@@ -33,6 +34,35 @@ class BidViewSet(ModelViewSet):
         if user.is_staff:
             return self.queryset
         return self.queryset.filter(user=self.request.user)
+
+    @transaction.atomic
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        item_id = serializer.validated_data["item"]
+        # lock item so other concurrent transactions have to wait
+        Item.objects.filter(id=item_id).select_for_update().first()
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )
+
+    @transaction.atomic
+    def update(self, request, *args, **kwargs):
+        # lock item so other concurrent transactions have to wait
+        bid = self.get_object()
+        instance = Item.objects.filter(pk=bid.item_id).select_for_update().first()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, "_prefetched_objects_cache", None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
 
 
 class ItemViewSet(ReadOnlyModelViewSet):
