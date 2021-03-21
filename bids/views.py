@@ -21,7 +21,7 @@ class BidViewSet(ModelViewSet):
         method = self.request.method
         if method == "GET":
             return BidDetailSerializer
-        elif method in ("PUT", "PATCH"):
+        elif method == "PATCH":
             return BidUpdateSerializer
         elif method == "POST":
             return BidCreateSerializer
@@ -42,10 +42,10 @@ class ItemViewSet(ReadOnlyModelViewSet):
     @action(detail=True, methods=["get"])
     @transaction.atomic
     def bids(self, request, pk=None):
-        item = self.get_object()
-        bids = Bid.objects.select_related("user", "item").filter(
-            item=item, user=request.user
-        )
+        bids = Bid.objects.select_related("user", "item").filter(item_id=pk)
+        user = request.user
+        if not user.is_staff:
+            bids = bids.filter(user=user)
 
         page = self.paginate_queryset(bids)
         if page is not None:

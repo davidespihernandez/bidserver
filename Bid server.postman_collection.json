@@ -6,190 +6,480 @@
 	},
 	"item": [
 		{
-			"name": "JWT get token",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"username\": \"user2@bids.com\",\n    \"password\": \"1234password2\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "Items",
+			"item": [
+				{
+					"name": "Items list",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjE3NTY4NjUyLCJqdGkiOiI3OTdiNTE0ODljZjE0NDdmYTA0YzhhYzc4NWQ0ODk5MyIsInVzZXJfaWQiOjN9.cEN3L2iUMt6NBebVEUSHFPPQRT_5scVWLXhnXqu8-7M",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/items/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"items",
+								""
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8000/api/token/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"api",
-						"token",
-						""
-					]
+				{
+					"name": "Get the current winning bid (item detail)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjE3NTY4NjUyLCJqdGkiOiI3OTdiNTE0ODljZjE0NDdmYTA0YzhhYzc4NWQ0ODk5MyIsInVzZXJfaWQiOjN9.cEN3L2iUMt6NBebVEUSHFPPQRT_5scVWLXhnXqu8-7M",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/items/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"items",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all bids for an item regular user",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjE3NjIwMjcwLCJqdGkiOiJlNmIwMDU3N2Q1Y2Q0MjdiYjBmOTVkNmFiNGQzZWM3NyIsInVzZXJfaWQiOjV9.OK3qft-MrzJh1035Luz3TWTyJHKKSm_QBA-pkyHQvGQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/items/4/bids/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"items",
+								"4",
+								"bids",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all bids for an item staff/admin user",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjE3NjIxODc4LCJqdGkiOiJiODhhYjI1MWNhMGM0ZTIyYTBmNjI5OGUyNzkyNjMxMyIsInVzZXJfaWQiOjF9.IAkeV9-E14nDSex35RTicW3IMKGin35tTEXUSyPQ3o0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/items/4/bids/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"items",
+								"4",
+								"bids",
+								""
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Items list",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjE3NTY4NjUyLCJqdGkiOiI3OTdiNTE0ODljZjE0NDdmYTA0YzhhYzc4NWQ0ODk5MyIsInVzZXJfaWQiOjN9.cEN3L2iUMt6NBebVEUSHFPPQRT_5scVWLXhnXqu8-7M",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "Bids",
+			"item": [
+				{
+					"name": "Record a user's bid on an item (create) Copy",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjE3NjE1MDQ1LCJqdGkiOiIxYmJmYzE4Mzc0MjI0Y2Q1ODcxYThmYWI0ODczZGQ1MCIsInVzZXJfaWQiOjR9.ZV-5iPOsKyUyLRc6QS2dSGRAp5mFBmCzZHD-vEDanWc",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"item\": 14,\n    \"amount\": 11\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/bids/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"bids",
+								""
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8000/api/items/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"api",
-						"items",
-						""
-					]
+				{
+					"name": "User can't create (POST) more than one bid for the same item",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjE3NjE1MDQ1LCJqdGkiOiIxYmJmYzE4Mzc0MjI0Y2Q1ODcxYThmYWI0ODczZGQ1MCIsInVzZXJfaWQiOjR9.ZV-5iPOsKyUyLRc6QS2dSGRAp5mFBmCzZHD-vEDanWc",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"item\": 14,\n    \"amount\": 11\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/bids/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"bids",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User can retrieve own bids",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjE3NjIwMjcwLCJqdGkiOiJlNmIwMDU3N2Q1Y2Q0MjdiYjBmOTVkNmFiNGQzZWM3NyIsInVzZXJfaWQiOjV9.OK3qft-MrzJh1035Luz3TWTyJHKKSm_QBA-pkyHQvGQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"item\": 14,\n    \"amount\": 11\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/bids/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"bids",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User can retrieve bid detail",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjE3NjIwMjcwLCJqdGkiOiJlNmIwMDU3N2Q1Y2Q0MjdiYjBmOTVkNmFiNGQzZWM3NyIsInVzZXJfaWQiOjV9.OK3qft-MrzJh1035Luz3TWTyJHKKSm_QBA-pkyHQvGQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8000/api/bids/6/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"bids",
+								"6",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User can't access other user's bids",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjE3NjIwMjcwLCJqdGkiOiJlNmIwMDU3N2Q1Y2Q0MjdiYjBmOTVkNmFiNGQzZWM3NyIsInVzZXJfaWQiOjV9.OK3qft-MrzJh1035Luz3TWTyJHKKSm_QBA-pkyHQvGQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8000/api/bids/7/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"bids",
+								"7",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User can update own bid, only if amount is higher than better bid for item",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjE3NjIwMjcwLCJqdGkiOiJlNmIwMDU3N2Q1Y2Q0MjdiYjBmOTVkNmFiNGQzZWM3NyIsInVzZXJfaWQiOjV9.OK3qft-MrzJh1035Luz3TWTyJHKKSm_QBA-pkyHQvGQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 101\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/bids/6/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"bids",
+								"6",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT not allowed",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjE3NjIwMjcwLCJqdGkiOiJlNmIwMDU3N2Q1Y2Q0MjdiYjBmOTVkNmFiNGQzZWM3NyIsInVzZXJfaWQiOjV9.OK3qft-MrzJh1035Luz3TWTyJHKKSm_QBA-pkyHQvGQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 101\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/bids/6/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"bids",
+								"6",
+								""
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Items detail (get the current winning bid)",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjE3NTY4NjUyLCJqdGkiOiI3OTdiNTE0ODljZjE0NDdmYTA0YzhhYzc4NWQ0ODk5MyIsInVzZXJfaWQiOjN9.cEN3L2iUMt6NBebVEUSHFPPQRT_5scVWLXhnXqu8-7M",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "Auth",
+			"item": [
+				{
+					"name": "JWT get token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"user2@bids.com\",\n    \"password\": \"1234password2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/token/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"token",
+								""
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8000/api/items/1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"api",
-						"items",
-						"1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Item bids",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjE3NTY4NjUyLCJqdGkiOiI3OTdiNTE0ODljZjE0NDdmYTA0YzhhYzc4NWQ0ODk5MyIsInVzZXJfaWQiOjN9.cEN3L2iUMt6NBebVEUSHFPPQRT_5scVWLXhnXqu8-7M",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "JWT get token admin user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin@example.test\",\n    \"password\": \"test\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/token/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"token",
+								""
+							]
 						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8000/api/items/1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"api",
-						"items",
-						"1"
-					]
+					},
+					"response": []
 				}
-			},
-			"response": []
-		},
-		{
-			"name": "Bid list",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjE3NTY4NjUyLCJqdGkiOiI3OTdiNTE0ODljZjE0NDdmYTA0YzhhYzc4NWQ0ODk5MyIsInVzZXJfaWQiOjN9.cEN3L2iUMt6NBebVEUSHFPPQRT_5scVWLXhnXqu8-7M",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8000/api/bids/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"api",
-						"bids",
-						""
-					]
-				}
-			},
-			"response": []
+			]
 		}
 	]
 }
