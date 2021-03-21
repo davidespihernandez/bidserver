@@ -95,3 +95,32 @@ class ItemViewSetDetailTestCase(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 2)
+
+
+@freeze_time("1975-01-02T00:00:00Z")
+class BidViewSetListTestCase(APITestCase):
+    builder = Builder()
+    url = reverse("bid-list")
+
+    def setUp(self):
+        self.regular_user = self.builder.user(
+            username="regular_user", password="regular_user"
+        )
+        self.admin_user = self.builder.user(
+            username="admin_user", password="admin_user", is_staff=True
+        )
+        self.item = self.builder.item()
+        self.builder.bid(item=self.item, user=self.regular_user, amount=1)
+        self.best_bid = self.builder.bid(item=self.item, user=self.admin_user, amount=2)
+        self.client.force_authenticate(self.regular_user)
+
+    def test_get_list_regular_user(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+
+    def test_get_list_admin_user(self):
+        self.client.force_authenticate(self.admin_user)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 2)
