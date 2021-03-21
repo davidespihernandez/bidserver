@@ -1,3 +1,5 @@
+from django.db.models import Q
+from django_filters import rest_framework as filters
 from django.db import transaction
 from rest_framework import status
 from rest_framework.decorators import action
@@ -65,9 +67,19 @@ class BidViewSet(ModelViewSet):
         return Response(serializer.data)
 
 
+class ItemFilter(filters.FilterSet):
+    q = filters.CharFilter(method="filter_text")
+
+    def filter_text(self, queryset, name, value):
+        return queryset.filter(
+            Q(name__icontains=value) | Q(description__icontains=value)
+        )
+
+
 class ItemViewSet(ReadOnlyModelViewSet):
     queryset = Item.objects.select_related("best_bid").order_by("name")
     serializer_class = ItemDetailSerializer
+    filterset_class = ItemFilter
 
     @action(detail=True, methods=["get"])
     @transaction.atomic

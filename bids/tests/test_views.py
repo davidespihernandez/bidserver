@@ -44,6 +44,11 @@ class ItemViewSetListTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertDictEqual(response.data, self.expected)
 
+    def test_get_list_filtered(self):
+        response = self.client.get(self.url, {"q": "0"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data["results"]), 1)
+
 
 @freeze_time("1975-01-02T00:00:00Z")
 class ItemViewSetDetailTestCase(APITestCase):
