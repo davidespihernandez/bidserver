@@ -4,7 +4,7 @@ from unittest import mock
 from django.urls import reverse
 from freezegun import freeze_time
 from rest_framework import status
-from rest_framework.test import APITestCase
+from rest_framework.test import APITestCase, APITransactionTestCase
 
 from bids.models import Bid
 from bids.tests.builder import Builder
@@ -148,10 +148,44 @@ class BidViewSetCreateTestCase(APITestCase):
         bid = Bid.objects.filter(item=self.item, user=self.user).first()
         self.assertEqual(bid.amount, Decimal(1))
 
-    def test_user_cant_create_2_bids(self):
+    def test_user_cant_create_two_bids(self):
         self.client.post(self.url, self.request_data)
         self.request_data["amount"] = Decimal(2)
         response = self.client.post(self.url, self.request_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         bid = Bid.objects.filter(item=self.item, user=self.user).first()
         self.assertEqual(bid.amount, Decimal(1))
+
+    def test_user_cant_create_lower_bid(self):
+        self.builder.bid(user=self.user, item=self.item, amount=Decimal(2))
+        response = self.client.post(self.url, self.request_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+@freeze_time("1975-01-02T00:00:00Z")
+class BidViewSetDetailTestCase(APITransactionTestCase):
+    builder = Builder()
+
+    def setUp(self):
+        self.user = self.builder.user()
+        self.item = self.builder.item()
+        self.bid = self.builder.bid(item=self.item, user=self.user, amount=1)
+        self.client.force_authenticate(self.user)
+
+    def test_user_can_update_to_higher_amount(self):
+        url = reverse("bid-detail", kwargs={"pk": self.bid.pk})
+        response = self.client.patch(url, {"amount": Decimal(2)})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        bid = Bid.objects.filter(item=self.item, user=self.user).first()
+        self.assertEqual(bid.amount, Decimal(2))
+
+    def test_user_cant_update_to_lower_amount(self):
+        url = reverse("bid-detail", kwargs={"pk": self.bid.pk})
+        response = self.client.patch(url, {"amount": Decimal(0)})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_user_cant_see_other_user_bids(self):
+        self.client.force_authenticate(self.builder.user("another"))
+        url = reverse("bid-detail", kwargs={"pk": self.bid.pk})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

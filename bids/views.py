@@ -51,8 +51,8 @@ class BidViewSet(ModelViewSet):
     @transaction.atomic
     def update(self, request, *args, **kwargs):
         # lock item so other concurrent transactions have to wait
-        bid = self.get_object()
-        instance = Item.objects.filter(pk=bid.item_id).select_for_update().first()
+        instance = self.get_object()
+        Item.objects.filter(pk=instance.item_id).select_for_update().first()
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
