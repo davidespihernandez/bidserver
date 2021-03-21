@@ -1,39 +1,56 @@
 from django.db import transaction
-from rest_framework import mixins
 from rest_framework.decorators import action
-from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import AllowAny
+from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet, GenericViewSet
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from bids.models import Bid, Item
-from bids.serializers import BidSerializer, ItemSerializer
+from bids.serializers import (
+    BidDetailSerializer,
+    ItemDetailSerializer,
+    BidCreateSerializer,
+    BidUpdateSerializer,
+)
 
 
 class BidViewSet(ModelViewSet):
-    queryset = Bid.objects.all()
-    serializer_class = BidSerializer
+    queryset = Bid.objects.all().order_by("date_created", "pk")
+    serializer_class = BidDetailSerializer
+
+    def get_serializer_class(self, *args, **kwargs):
+        method = self.request.method
+        if method == "GET":
+            return BidDetailSerializer
+        elif method in ("PUT", "PATCH"):
+            return BidUpdateSerializer
+        elif method == "POST":
+            return BidCreateSerializer
+        else:
+            raise MethodNotAllowed(method)
 
     def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            return self.queryset
         return self.queryset.filter(user=self.request.user)
 
 
-class ItemViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewSet):
-    queryset = Item.objects.select_related("best_bid").all()
-    serializer_class = ItemSerializer
+class ItemViewSet(ReadOnlyModelViewSet):
+    queryset = Item.objects.select_related("best_bid").order_by("name")
+    serializer_class = ItemDetailSerializer
 
     @action(detail=True, methods=["get"])
     @transaction.atomic
     def bids(self, request, pk=None):
-        item = get_object_or_404(Item, pk=pk)
+        item = self.get_object()
         bids = Bid.objects.select_related("user", "item").filter(
             item=item, user=request.user
         )
 
         page = self.paginate_queryset(bids)
         if page is not None:
-            serializer = BidSerializer(page, many=True)
+            serializer = BidDetailSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
-        serializer = BidSerializer(bids, many=True)
+        serializer = BidDetailSerializer(bids, many=True)
         return Response(serializer.data)

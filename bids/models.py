@@ -15,9 +15,6 @@ class Item(models.Model):
         "Bid", on_delete=models.SET_NULL, null=True, related_name="best_item"
     )
 
-    class Meta:
-        ordering = ["name"]
-
 
 class Bid(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -27,8 +24,7 @@ class Bid(models.Model):
     last_updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        unique_together = [["user", "item"], ["item", "amount"]]
-        ordering = ["-amount", "-last_updated", "-pk"]
+        unique_together = [["user", "item"]]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
