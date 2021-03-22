@@ -1,5 +1,6 @@
 from decimal import Decimal
 
+from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 from bids.models import Item, Bid
 from bids.tests.builder import Builder
@@ -14,6 +15,7 @@ class Command(BaseCommand):
         Item.objects.all().update(best_bid=None)
         Bid.objects.all().delete()
         Item.objects.all().delete()
+        get_user_model().objects.filter(username__startswith="user_").delete()
         users = []
         items = []
         for i in range(10):
