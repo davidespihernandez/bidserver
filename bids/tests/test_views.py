@@ -152,6 +152,8 @@ class BidViewSetCreateTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         bid = Bid.objects.filter(item=self.item, user=self.user).first()
         self.assertEqual(bid.amount, Decimal(1))
+        self.item.refresh_from_db()
+        self.assertEqual(self.item.best_bid.pk, bid.pk)
 
     def test_user_cant_create_two_bids(self):
         self.client.post(self.url, self.request_data)
@@ -162,7 +164,11 @@ class BidViewSetCreateTestCase(APITestCase):
         self.assertEqual(bid.amount, Decimal(1))
 
     def test_user_cant_create_lower_bid(self):
-        self.builder.bid(user=self.user, item=self.item, amount=Decimal(2))
+        self.builder.bid(
+            user=self.builder.user("another_user"),
+            item=self.item,
+            amount=Decimal(2),
+        )
         response = self.client.post(self.url, self.request_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -195,6 +201,8 @@ class BidViewSetDetailTestCase(APITransactionTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         bid = Bid.objects.filter(item=self.item, user=self.user).first()
         self.assertEqual(bid.amount, Decimal(2))
+        self.item.refresh_from_db()
+        self.assertEqual(bid.pk, self.item.best_bid.pk)
 
     def test_user_cant_update_to_lower_amount(self):
         url = reverse("bid-detail", kwargs={"pk": self.bid.pk})
