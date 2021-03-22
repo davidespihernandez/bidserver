@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from bids.models import Item, Bid
 
@@ -36,6 +37,11 @@ class ItemBestBidSerializer(serializers.ModelSerializer):
 class BidCreateSerializer(serializers.ModelSerializer):
     def save(self, **kwargs):
         return super().save(**kwargs, user=self.context["request"].user)
+
+    def validate_amount(self, value):
+        if value <= 0:
+            raise ValidationError("Bid amount must be positive")
+        return value
 
     class Meta:
         model = Bid

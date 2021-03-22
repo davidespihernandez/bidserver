@@ -1,4 +1,7 @@
+from decimal import Decimal
+
 from django.conf import settings
+from django.core.validators import MinValueValidator
 from django.db import models
 
 from bids.exceptions import (
@@ -19,7 +22,9 @@ class Item(models.Model):
 class Bid(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name="bids")
-    amount = models.DecimalField(max_digits=12, decimal_places=2)
+    amount = models.DecimalField(
+        max_digits=12, decimal_places=2, validators=[MinValueValidator(Decimal("0.01"))]
+    )
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
 

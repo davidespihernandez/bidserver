@@ -184,6 +184,11 @@ class BidViewSetCreateTestCase(APITestCase):
         self.item.refresh_from_db()
         self.assertEqual(bid.pk, self.item.best_bid.pk)
 
+    def test_user_cant_create_negative_bid(self):
+        self.request_data["amount"] = Decimal(-1)
+        response = self.client.post(self.url, self.request_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
 
 @freeze_time("1975-01-02T00:00:00Z")
 class BidViewSetDetailTestCase(APITransactionTestCase):
