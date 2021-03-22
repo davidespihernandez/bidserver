@@ -111,3 +111,21 @@ There's no API for users (was not a requirement), so if you want to create more 
 ### 3.6 Tests with postman
 
 There's a postman collection in the root folder containing requests for items, bids and authentication.
+
+### 3.7 Performance tests
+
+In the postman collection there are scripts for testing performance. The "Tests" tab for some requests contains a script that sends a bunch of requests to the server and measures the average time, which is displayed as a final test result. 
+
+These are some results:
+
+- Item detail. Average time per request, 42ms.
+- Item list of bids for admin user (returning list of 10 bids). Average time per request, 25.82ms.
+
+In addition, there's a management command called `test_performance` that tests 1000 bid POST for different users. This is the result:
+
+```
+Created 1000 bids in 4.540909290313721 seconds
+Average response time 4.540909290313721 ms
+```
+
+So the POST Bid has an average time of 4.54ms.
