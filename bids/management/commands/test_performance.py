@@ -20,16 +20,16 @@ class Command(BaseCommand):
     )
 
     def clean_up(self, item, users):
-        logger.warning("Cleaning data")
+        logger.info("Cleaning data")
         Bid.objects.filter(user__in=users).delete()
         get_user_model().objects.filter(
             username__in=[user.username for user in users]
         ).delete()
         Item.objects.filter(pk=item.pk).delete()
-        logger.warning("Cleaned data")
+        logger.info("Cleaned data")
 
     def handle(self, *args, **options):
-        logger.warning("Creating test data")
+        logger.info("Creating test data")
         builder = Builder()
         total_users = 1000
         item = builder.item(name="performance", description="performance")
@@ -37,10 +37,10 @@ class Command(BaseCommand):
             builder.user(username=f"performance_{i}", password="password")
             for i in range(total_users)
         ]
-        logger.warning("Created test data")
+        logger.info("Created test data")
         total_time = 0
         amount = 1
-        logger.warning("Performing %s POST requests", total_users)
+        logger.info("Performing %s POST requests", total_users)
         for user in users:
             token = RefreshToken.for_user(user)
             jwt = str(token.access_token)
@@ -54,12 +54,12 @@ class Command(BaseCommand):
                 headers={
                     "Accept": "application/json",
                     "Content-type": "application/json",
-                    "Authentication": f"Bearer {jwt}",
+                    "Authorization": f"Bearer {jwt}",
                 },
             )
             duration = time.time() - start_time
             total_time = total_time + duration
             amount = amount + 1
-        logger.warning("Created %s bids in %s seconds", total_users, total_time)
-        logger.warning("Average response time %s ms", total_time / total_users * 1000)
+        logger.info("Created %s bids in %s seconds", total_users, total_time)
+        logger.info("Average response time %s ms", total_time / total_users * 1000)
         self.clean_up(item, users)

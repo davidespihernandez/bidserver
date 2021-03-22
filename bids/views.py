@@ -31,7 +31,7 @@ class BidViewSet(
     Admin users can access all bids, the rest of users are limited to their own bids.
     """
 
-    queryset = Bid.objects.all().order_by("date_created", "pk")
+    queryset = Bid.objects.select_related("item", "user").order_by("date_created", "pk")
     serializer_class = BidDetailSerializer
 
     def get_serializer_class(self, *args, **kwargs):
@@ -50,35 +50,6 @@ class BidViewSet(
         if user.is_staff:
             return self.queryset
         return self.queryset.filter(user=self.request.user)
-
-    @transaction.atomic
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        item = serializer.validated_data["item"]
-        # lock item so other concurrent transactions have to wait
-        Item.objects.filter(id=item.id).select_for_update().first()
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(
-            serializer.data, status=status.HTTP_201_CREATED, headers=headers
-        )
-
-    @transaction.atomic
-    def update(self, request, *args, **kwargs):
-        # lock item so other concurrent transactions have to wait
-        instance = self.get_object()
-        Item.objects.filter(pk=instance.item_id).select_for_update().first()
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-
-        if getattr(instance, "_prefetched_objects_cache", None):
-            # If 'prefetch_related' has been applied to a queryset, we need to
-            # forcibly invalidate the prefetch cache on the instance.
-            instance._prefetched_objects_cache = {}
-
-        return Response(serializer.data)
 
 
 class ItemFilter(filters.FilterSet):

@@ -2,7 +2,7 @@ from decimal import Decimal
 
 from django.conf import settings
 from django.core.validators import MinValueValidator
-from django.db import models
+from django.db import models, transaction
 
 from bids.exceptions import (
     HigherBidAlreadyExists,
@@ -47,20 +47,24 @@ class Bid(models.Model):
         )
 
     def save(self, *args, **kwargs):
-        current_best_bid = self.item.best_bid
-        if self.amount < self._previous_amount:
-            raise LowerAmountNotAllowed(
-                f"Trying to lower amount from {self._previous_amount} to {self.amount}"
-            )
+        with transaction.atomic():
+            # lock item to avoid 2 concurrent transactions modifying the same item
+            item = Item.objects.filter(id=self.item.id).select_for_update().get()
 
-        if current_best_bid and current_best_bid.amount > self.amount:
-            raise HigherBidAlreadyExists(
-                f"A bid higher than {self.amount} already exists"
-            )
-        if self.user_has_another_bid():
-            raise UserAlreadyHasABid("The user already has a bid for this item")
+            if self.amount < self._previous_amount:
+                raise LowerAmountNotAllowed(
+                    f"Trying to lower amount from {self._previous_amount} to {self.amount}"
+                )
 
-        super().save(*args, **kwargs)
-        self._previous_amount = self.amount
-        self.item.best_bid = self
-        self.item.save()
+            current_best_bid = item.best_bid
+            if current_best_bid and current_best_bid.amount > self.amount:
+                raise HigherBidAlreadyExists(
+                    f"A bid higher than {self.amount} already exists"
+                )
+            if self.user_has_another_bid():
+                raise UserAlreadyHasABid("The user already has a bid for this item")
+
+            super().save(*args, **kwargs)
+            self._previous_amount = self.amount
+            self.item.best_bid = self
+            self.item.save()

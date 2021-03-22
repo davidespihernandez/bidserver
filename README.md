@@ -124,11 +124,38 @@ These are some results:
 In addition, there's a management command called `test_performance` that tests 1000 bid POST for different users. This is the result:
 
 ```
-Created 1000 bids in 4.540909290313721 seconds
-Average response time 4.540909290313721 ms
+2021-03-22 20:00:22,660 bids.management.commands.test_performance INFO     Created 1000 bids in 14.602702856063843 seconds
+2021-03-22 20:00:22,660 bids.management.commands.test_performance INFO     Average response time 14.602702856063843 ms
 ```
 
-So the POST Bid has an average time of 4.54ms.
+So the POST Bid has an average time of 14.60ms.
+
+### 3.8 Test concurrency
+
+There's another management command called `test_concurrency` to test concurrency while posting bids.
+The command runs 5 concurrent POST requests using asyncio, and prints the item best bid, which should be 5 always.
+This is the command output:
+
+```
+(bidserver) % docker exec -it bidapi python manage.py test_concurrency
+2021-03-22 20:28:18,768 bids.management.commands.test_concurrency INFO     Creating test data
+2021-03-22 20:28:19,281 bids.management.commands.test_concurrency INFO     Created test data
+2021-03-22 20:28:19,281 bids.management.commands.test_concurrency INFO     Performing 5 concurrent POST requests
+2021-03-22 20:28:19,281 bids.management.commands.test_concurrency INFO     Calling concurrency_3 amount 4
+2021-03-22 20:28:19,284 bids.management.commands.test_concurrency INFO     Calling concurrency_0 amount 1
+2021-03-22 20:28:19,284 bids.management.commands.test_concurrency INFO     Calling concurrency_4 amount 5
+2021-03-22 20:28:19,285 bids.management.commands.test_concurrency INFO     Calling concurrency_2 amount 3
+2021-03-22 20:28:19,285 bids.management.commands.test_concurrency INFO     Calling concurrency_1 amount 2
+Executed post! {"item":33,"amount":"4.00"}
+Executed post! {"item":33,"amount":"5.00"}
+Executed post! ["A bid higher than 3.00 already exists"]
+Executed post! ["A bid higher than 1.00 already exists"]
+Executed post! ["A bid higher than 2.00 already exists"]
+2021-03-22 20:28:19,347 bids.management.commands.test_concurrency INFO     Item best bid amount is 5.00
+2021-03-22 20:28:19,347 bids.management.commands.test_concurrency INFO     Cleaning data
+2021-03-22 20:28:19,362 bids.management.commands.test_concurrency INFO     Cleaned data
+
+```
 
 ## 4. Documentation
 
