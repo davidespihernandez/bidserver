@@ -1,11 +1,11 @@
 from django.db.models import Q
 from django_filters import rest_framework as filters
 from django.db import transaction
-from rest_framework import status
+from rest_framework import status, mixins
 from rest_framework.decorators import action
 from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet, GenericViewSet
 
 from bids.models import Bid, Item
 from bids.serializers import (
@@ -16,7 +16,21 @@ from bids.serializers import (
 )
 
 
-class BidViewSet(ModelViewSet):
+class BidViewSet(
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.ListModelMixin,
+    GenericViewSet,
+):
+    """
+    Bids.
+    POST: create a new bid for a user-item
+    PATCH: update an existing bid
+    GET: retrieve the list or detail of a bid
+    Admin users can access all bids, the rest of users are limited to their own bids.
+    """
+
     queryset = Bid.objects.all().order_by("date_created", "pk")
     serializer_class = BidDetailSerializer
 
@@ -77,6 +91,11 @@ class ItemFilter(filters.FilterSet):
 
 
 class ItemViewSet(ReadOnlyModelViewSet):
+    """
+    Items.
+    GET: Retrieves the list or detail of an item, including the best bid so far.
+    """
+
     queryset = Item.objects.select_related("best_bid").order_by("name")
     serializer_class = ItemDetailSerializer
     filterset_class = ItemFilter

@@ -13,6 +13,7 @@ psycopg2 = "*"
 djangorestframework-simplejwt = "*"
 freezegun = "*"
 requests = "*"
+drf-spectacular = "*"
 
 [requires]
 python_version = "3.8"

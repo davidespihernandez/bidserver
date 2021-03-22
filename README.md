@@ -129,3 +129,7 @@ Average response time 4.540909290313721 ms
 ```
 
 So the POST Bid has an average time of 4.54ms.
+
+## 4. Documentation
+
+There's a simple Open API documentation for the API that can be accessed in this URL: http://localhost:8000/api/schema/swagger-ui/#/
