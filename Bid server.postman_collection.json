@@ -10,6 +10,57 @@
 			"item": [
 				{
 					"name": "Items list",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"iterations = 100;",
+									"//responseTimes is an array for collecting response time values",
+									"responseTimes = [];",
+									"i=0;",
+									"function sendRequest() {",
+									"    pm.sendRequest({",
+									"        url: \"localhost:8000/api/items/\",",
+									"        method: 'GET',",
+									"        header: {",
+									"        'Accept': 'application/json',",
+									"        'Content-Type': 'application/x-www-form-urlencoded',",
+									"        'Authorization': \"Bearer \" + \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjE3NzAwMTA4LCJqdGkiOiI5MmMzZWNmYTE5NTk0ZjQ2ODE2NDRkZjNhM2EyZjVkOCIsInVzZXJfaWQiOjF9.oBxkGe20Ssf7r1axJbDFk6HkZPyYPnBKoZf3exOz95U\"",
+									"      },",
+									"    }, function (err, res) {",
+									"        pm.test(\"Response time is \" + res.responseTime, function (){",
+									"        pm.expect(err).to.equal(null);",
+									"        pm.expect(res).to.have.property('code', 200);",
+									"        responseTimes.push(res.responseTime);",
+									"        });",
+									"        if (i < iterations - 1) {",
+									"            i++;",
+									"            setTimeout(sendRequest, 0);",
+									"        } ",
+									"        else {",
+									"            averageTime = average(responseTimes);",
+									"            pm.test(\"Average time \" + averageTime, function () {",
+									"                pm.expect(averageTime).to.be.above(0);",
+									"            });",
+									"        }",
+									"    });",
+									"}",
+									"sendRequest();",
+									"function average(array) {",
+									"    sum = 0;",
+									"    index = 0;",
+									"    while (index < array.length) {",
+									"        sum = sum + array[index]",
+									"        index += 1;",
+									"    }",
+									"    return sum/array.length;",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -18,7 +69,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjE3NTY4NjUyLCJqdGkiOiI3OTdiNTE0ODljZjE0NDdmYTA0YzhhYzc4NWQ0ODk5MyIsInVzZXJfaWQiOjN9.cEN3L2iUMt6NBebVEUSHFPPQRT_5scVWLXhnXqu8-7M",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjE3NzAwMTA4LCJqdGkiOiI5MmMzZWNmYTE5NTk0ZjQ2ODE2NDRkZjNhM2EyZjVkOCIsInVzZXJfaWQiOjF9.oBxkGe20Ssf7r1axJbDFk6HkZPyYPnBKoZf3exOz95U",
 								"type": "text"
 							}
 						],
@@ -32,7 +83,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8000/api/items/?q=1",
+							"raw": "http://localhost:8000/api/items/",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -42,12 +93,6 @@
 								"api",
 								"items",
 								""
-							],
-							"query": [
-								{
-									"key": "q",
-									"value": "1"
-								}
 							]
 						}
 					},
@@ -135,6 +180,57 @@
 				},
 				{
 					"name": "Get all bids for an item staff/admin user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"iterations = 100;",
+									"//responseTimes is an array for collecting response time values",
+									"responseTimes = [];",
+									"i=0;",
+									"function sendRequest() {",
+									"    pm.sendRequest({",
+									"        url: \"localhost:8000/api/items/4/bids/\",",
+									"        method: 'GET',",
+									"        header: {",
+									"        'Accept': 'application/json',",
+									"        'Content-Type': 'application/x-www-form-urlencoded',",
+									"        'Authorization': \"Bearer \" + \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjE3NzAyNzY2LCJqdGkiOiI2NmMyOTY5OWUxNDg0MTE0OWQyZWY3MGVhN2ZlMDJlZSIsInVzZXJfaWQiOjExfQ.ey_-4PoT3bDKE505oNUq6pqg3GSzjkLAHKO84JQAEyQ\"",
+									"      },",
+									"    }, function (err, res) {",
+									"        pm.test(\"Response time is \" + res.responseTime, function (){",
+									"        pm.expect(err).to.equal(null);",
+									"        pm.expect(res).to.have.property('code', 200);",
+									"        responseTimes.push(res.responseTime);",
+									"        });",
+									"        if (i < iterations - 1) {",
+									"            i++;",
+									"            setTimeout(sendRequest, 0);",
+									"        } ",
+									"        else {",
+									"            averageTime = average(responseTimes);",
+									"            pm.test(\"Average time \" + averageTime, function () {",
+									"                pm.expect(averageTime).to.be.above(0);",
+									"            });",
+									"        }",
+									"    });",
+									"}",
+									"sendRequest();",
+									"function average(array) {",
+									"    sum = 0;",
+									"    index = 0;",
+									"    while (index < array.length) {",
+									"        sum = sum + array[index]",
+									"        index += 1;",
+									"    }",
+									"    return sum/array.length;",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -143,7 +239,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjE3NjIxODc4LCJqdGkiOiJiODhhYjI1MWNhMGM0ZTIyYTBmNjI5OGUyNzkyNjMxMyIsInVzZXJfaWQiOjF9.IAkeV9-E14nDSex35RTicW3IMKGin35tTEXUSyPQ3o0",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjE3NzAyNzY2LCJqdGkiOiI2NmMyOTY5OWUxNDg0MTE0OWQyZWY3MGVhN2ZlMDJlZSIsInVzZXJfaWQiOjExfQ.ey_-4PoT3bDKE505oNUq6pqg3GSzjkLAHKO84JQAEyQ",
 								"type": "text"
 							}
 						],
@@ -186,13 +282,13 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjE3NjE1MDQ1LCJqdGkiOiIxYmJmYzE4Mzc0MjI0Y2Q1ODcxYThmYWI0ODczZGQ1MCIsInVzZXJfaWQiOjR9.ZV-5iPOsKyUyLRc6QS2dSGRAp5mFBmCzZHD-vEDanWc",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjE3NzAyNzY2LCJqdGkiOiI2NmMyOTY5OWUxNDg0MTE0OWQyZWY3MGVhN2ZlMDJlZSIsInVzZXJfaWQiOjExfQ.ey_-4PoT3bDKE505oNUq6pqg3GSzjkLAHKO84JQAEyQ",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"item\": 14,\n    \"amount\": 11\n}",
+							"raw": "{\n    \"item\": 4,\n    \"amount\": 11\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -261,7 +357,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjE3NjIwMjcwLCJqdGkiOiJlNmIwMDU3N2Q1Y2Q0MjdiYjBmOTVkNmFiNGQzZWM3NyIsInVzZXJfaWQiOjV9.OK3qft-MrzJh1035Luz3TWTyJHKKSm_QBA-pkyHQvGQ",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjE3NzAzMDUyLCJqdGkiOiJjYmFlMWViZTFkODI0ZWU3YWZlZGViOGE1NjY1NjkyMCIsInVzZXJfaWQiOjF9.cPm4-OxGRmRp8ewN6tEfRnjL-Oooc3o5ryuCP4VSSXs",
 								"type": "text"
 							}
 						],
